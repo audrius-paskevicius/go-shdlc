@@ -1,4 +1,4 @@
-package hdlc
+package shdlc
 
 import (
 	"bufio"
