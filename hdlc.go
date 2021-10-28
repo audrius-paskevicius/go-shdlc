@@ -24,7 +24,7 @@
 // This package does not deal with the address, control and crc fields of a true HDLC frame.
 // You can add those by binary-encoding them into the buffers you send.
 //
-package hdlc
+package shdlc
 
 // ESC, FLAG and ABORT are escaped in the stream by prefixing ESC and flipping bit 5.
 const (
