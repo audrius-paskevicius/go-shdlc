@@ -1,4 +1,4 @@
-# go-hdlc
+# go-shdlc
 
 [![GoDoc](https://godoc.org/github.com/lvdlvd/go-hdlc?status.svg)](https://godoc.org/github.com/lvdlvd/go-hdlc)
 
