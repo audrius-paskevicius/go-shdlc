@@ -50,7 +50,8 @@ func (f *Framer) Abort() error {
 	if f.lastwasflag {
 		return nil
 	}
-	_, err := f.w.Write([]byte{ABORT})
+	// _, err := f.w.Write([]byte{ABORT})
+	_, err := f.w.Write([]byte{})
 	return err
 }
 
@@ -64,10 +65,10 @@ func (f *Framer) WriteEscaped(p []byte) (n int, err error) {
 		}
 	}()
 
-	idxEsc, idxFlag, idxAbort := find(p, ESC), find(p, FLAG), find(p, ABORT)
+	idxEsc, idxFlag, idxXon, idxXoff := find(p, ESC), find(p, FLAG), find(p, XON), find(p, XOFF)
 	var nn int
 	for len(p) > 0 {
-		idx := min3(idxEsc, idxFlag, idxAbort)
+		idx := min4(idxEsc, idxFlag, idxXon, idxXoff)
 		if idx > 0 {
 			nn, err = f.w.Write(p[:idx])
 			n += nn
@@ -95,7 +96,8 @@ func (f *Framer) WriteEscaped(p []byte) (n int, err error) {
 		p = p[idx:]
 		idxEsc -= idx
 		idxFlag -= idx
-		idxAbort -= idx
+		idxXon -= idx
+		idxXoff -= idx
 
 		if idxEsc < 0 {
 			idxEsc = find(p, ESC)
@@ -103,8 +105,11 @@ func (f *Framer) WriteEscaped(p []byte) (n int, err error) {
 		if idxFlag < 0 {
 			idxFlag = find(p, FLAG)
 		}
-		if idxAbort < 0 {
-			idxAbort = find(p, ABORT)
+		if idxXon < 0 {
+			idxXon = find(p, XON)
+		}
+		if idxXoff < 0 {
+			idxXoff = find(p, XOFF)
 		}
 	}
 	return
@@ -118,15 +123,18 @@ func find(p []byte, c byte) int {
 	return len(p)
 }
 
-func min3(a, b, c int) int {
-	if a <= b && a <= c {
+func min4(a, b, c, d int) int {
+	if a <= b && a <= c && a <= d {
 		return a
 	}
-	if b <= a && b <= c {
+	if b <= a && b <= c && b <= d {
 		return b
 	}
-	if c <= a && c <= b {
+	if c <= a && c <= b && c <= d {
 		return c
+	}
+	if d <= a && d <= b && d <= c {
+		return d
 	}
 	panic("should not happen")
 }

@@ -124,10 +124,10 @@ func (u *Unframer) ReadEscaped(p []byte) (n int, err error) {
 			break
 		}
 		u.lastwasflag = false
-		if val == ABORT {
-			err = ErrAbort
-			break
-		}
+		// if val == ABORT {
+		// 	err = ErrAbort
+		// 	break
+		// }
 
 		if n >= len(p) {
 			// we have an esc or a value but we won't

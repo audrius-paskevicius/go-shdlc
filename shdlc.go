@@ -30,5 +30,7 @@ package shdlc
 const (
 	ESC   = 0x7d
 	FLAG  = 0x7e // Frame separator
-	ABORT = 0x7f // Abort a frame. Receiver should discard.
+	// ABORT = 0x7f // Abort a frame. Receiver should discard.
+	XON   = 0x11
+	XOFF  = 0x13
 )
